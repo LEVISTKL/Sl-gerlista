@@ -1,0 +1,8 @@
+C:\Users\LEVIS\Desktop\PROJECTS\Slágerlista - egyéni munka\bin\Debug\Slágerlista - egyéni munka.exe.config
+C:\Users\LEVIS\Desktop\PROJECTS\Slágerlista - egyéni munka\bin\Debug\Slágerlista - egyéni munka.exe
+C:\Users\LEVIS\Desktop\PROJECTS\Slágerlista - egyéni munka\bin\Debug\Slágerlista - egyéni munka.pdb
+C:\Users\LEVIS\Desktop\PROJECTS\Slágerlista - egyéni munka\obj\Debug\Slágerlista - egyéni munka.csproj.AssemblyReference.cache
+C:\Users\LEVIS\Desktop\PROJECTS\Slágerlista - egyéni munka\obj\Debug\Slágerlista - egyéni munka.csproj.SuggestedBindingRedirects.cache
+C:\Users\LEVIS\Desktop\PROJECTS\Slágerlista - egyéni munka\obj\Debug\Slágerlista - egyéni munka.csproj.CoreCompileInputs.cache
+C:\Users\LEVIS\Desktop\PROJECTS\Slágerlista - egyéni munka\obj\Debug\Slágerlista - egyéni munka.exe
+C:\Users\LEVIS\Desktop\PROJECTS\Slágerlista - egyéni munka\obj\Debug\Slágerlista - egyéni munka.pdb
