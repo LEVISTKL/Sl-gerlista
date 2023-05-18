@@ -9,20 +9,27 @@ namespace Ingatlanok
 {
     internal class Program
     {
+        #region adatstrukturak
         struct zenestruct
         {
             public string eloado;
             public string cim;
             public int szavazatSzam;
         }
+        #endregion
 
+        #region program adatai
         static List<zenestruct> Zenek = new List<zenestruct>();
+        #endregion
 
-        static List<int> cursorTops = new List<int>();
-        static int maxview = 4;
-        static List<string> strings = new List<string>();
-        static int opcio = 0;
-        static void Main(string[] args)
+        #region modulvaltozok
+        static List<int> cursorTops = new List<int>();//a kurzol ideiglenes pozitciojanak valtozoja
+        static int maxview = 4;//a táblalista maximálisan egyszerre láthatő elemeinek száma
+        static List<string> strings = new List<string>();//a tablalista számára befogadható adatlista melyet a táblabeviteli lista előtt adunk adatot illetve változtatjuk
+        static int opcio = 0;//a táblalista által visszadott szám, mely annak az adatlisat elemindexet adja vissza amely adatlistából a "strings" lista készült. 
+        #endregion
+
+        static void Main(string[] args)//fő program
         {
             filekezeles("");
             filekezeles("load");
@@ -30,7 +37,7 @@ namespace Ingatlanok
         }
 
 
-        static void menu()
+        static void menu()//menu
         {
             ConsoleKey consoleKey = default;
             while (consoleKey != ConsoleKey.Escape)
@@ -42,13 +49,13 @@ namespace Ingatlanok
                 cursorTops.Add(Console.CursorTop); Console.WriteLine("( ) TOP 10");
                 cursorTops.Add(Console.CursorTop); Console.WriteLine("( ) szavazás");
                 consoleKey = mozgas(consoleKey);
-                if (consoleKey == ConsoleKey.Enter && cursorTops[0] == Console.CursorTop)//felhasználói felület
+                if (consoleKey == ConsoleKey.Enter && cursorTops[0] == Console.CursorTop)//zene felvitele
                 {
                     Console.Clear();
                     cursorTops.Clear();
                     zeneNew(zene_adatbekeres("eloado-cim"));
                 }
-                else if (consoleKey == ConsoleKey.Enter && cursorTops[1] == Console.CursorTop)
+                else if (consoleKey == ConsoleKey.Enter && cursorTops[1] == Console.CursorTop)//top 10
                 {
                     Console.Clear();
                     cursorTops.Clear();
@@ -58,10 +65,15 @@ namespace Ingatlanok
                     {
                         strings.Add(Zenek[i].eloado + ";" + Zenek[i].cim + ";" + Zenek[i].szavazatSzam);
                     }
-                    opcio = TablaLista(szamrend(strings, "zene", "szavazat"), consoleKey, "zene");
+                    strings = szamrend(strings, "zene", "szavazat");
+                    for (int i = 0; i < strings.Count; i++)
+                    {
+                        strings[i] = (i+1)+".  "+strings[i];
+                    }
+                    opcio = TablaLista(strings, consoleKey, "zene");
                     consoleKey = default;
                 }
-                else if (consoleKey == ConsoleKey.Enter && cursorTops[2] == Console.CursorTop)
+                else if (consoleKey == ConsoleKey.Enter && cursorTops[2] == Console.CursorTop)//szavazás
                 {
 
 
@@ -95,12 +107,23 @@ namespace Ingatlanok
             }
             consoleKey = default;
         }
-        static int TablaLista(List<string> adatok, ConsoleKey consoleKey, string tipus)
+        static int TablaLista(List<string> adatok, ConsoleKey consoleKey, string tipus)//táblalista(egy string lista amely a kiíratandó adatokat tartalmazza  ,  tartalmazza a consolekey-t  ,  egy tipust amely azt határozza meg , hogy mien adatokkal dolgozik és azon tipus alapján zajlódjanak a műveletek)
         {
             int pozitcio = 0;
             int pozitcio2 = 0;
             consoleKey = default;
             int kurzolpozicio = Console.CursorTop;
+            int[] kozok = new int[adatok[0].Split(';').Length];
+            for (int i = 0; i < kozok.Length; i++)
+            {
+                for (int j = 0; j < adatok.Count; j++)
+                {
+                    if (kozok[i] < adatok[j].Split(';')[i].Length)
+                    {
+                        kozok[i] = adatok[j].Split(';')[i].Length;
+                    }
+                }
+            }
             while (consoleKey != ConsoleKey.Enter && consoleKey != ConsoleKey.Escape)
             {
                 cursorTops.Clear();
@@ -108,7 +131,7 @@ namespace Ingatlanok
                 Console.WriteLine("---");
                 for (int i = pozitcio2; i < adatok.Count && i < pozitcio2 + maxview; i++)
                 {
-                    Console.WriteLine(hossz(40, 0, " "));
+                    Console.WriteLine(hossz(80, 0, " "));
                 }
                 Console.SetCursorPosition(0, kurzolpozicio);
 
@@ -122,7 +145,7 @@ namespace Ingatlanok
                     }
                     if (tipus == "zene")
                     {
-                        cursorTops.Add(Console.CursorTop); Console.WriteLine("( ) " + adatok[i].Split(';')[0] + " " + adatok[i].Split(';')[1] + " " + adatok[i].Split(';')[2]);
+                        cursorTops.Add(Console.CursorTop); Console.WriteLine("( ) " + adatok[i].Split(';')[0] + hossz(kozok[0]+5, adatok[i].Split(';')[0].Length, " ") + adatok[i].Split(';')[1] + hossz(kozok[1]+5, adatok[i].Split(';')[1].Length, " ") + adatok[i].Split(';')[2]);
                     }
                     else
                     {
@@ -338,7 +361,7 @@ namespace Ingatlanok
             Console.WriteLine("mentés");
             if (parancs == "save")
             {
-                StreamWriter streamWriter_Zene = new StreamWriter("ugyfelek.txt");
+                StreamWriter streamWriter_Zene = new StreamWriter("zenek.txt");
                 Console.WriteLine("zene mentése");
                 for (int i = 0; i < Zenek.Count; i++)
                 {
@@ -349,7 +372,7 @@ namespace Ingatlanok
             }
             else if (parancs == "load")
             {
-                string[] allomanyUgyfel = File.ReadAllLines("ugyfelek.txt");
+                string[] allomanyUgyfel = File.ReadAllLines("zenek.txt");
 
                 for (int i = 0; i < allomanyUgyfel.Length; i++)
                 {
@@ -362,21 +385,13 @@ namespace Ingatlanok
             }
             else
             {
-                if (!File.Exists("ingatlanok.txt"))
+               
+                if (!File.Exists("zenek.txt"))
                 {
-                    StreamWriter streamWriter = new StreamWriter("ingatlanok.txt");
+                    StreamWriter streamWriter = new StreamWriter("zenek.txt");
                     streamWriter.Close();
                 }
-                if (!File.Exists("ugyfelek.txt"))
-                {
-                    StreamWriter streamWriter = new StreamWriter("ugyfelek.txt");
-                    streamWriter.Close();
-                }
-                if (!File.Exists("MAIN.txt"))
-                {
-                    StreamWriter streamWriter = new StreamWriter("MAIN.txt");
-                    streamWriter.Close();
-                }
+             
             }
         }
     }
